@@ -16,9 +16,14 @@ function Login() {
     try {
       const res = await axios.post(
         "http://172.18.0.3:8080/api/auth/login",
-        formData,
+        formData
       );
+
+      // Store token, userId, and username in localStorage
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("userId", res.data.user.id);
+      localStorage.setItem("username", res.data.user.username);
+
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed.");
@@ -66,3 +71,4 @@ function Login() {
 }
 
 export default Login;
+

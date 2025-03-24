@@ -78,6 +78,41 @@ function Post({ post: initialPost, onReact }) {
     }
   };
 
+  // Add onReact logic to handle like/dislike reactions
+  const handleReaction = async (reactionType) => {
+    const token = getAuthToken();
+    if (!token) return;
+
+    try {
+      // Adjust the URL based on the reaction type
+      const url =
+        reactionType === "like"
+          ? `http://172.18.0.3:8080/api/posts/${post.id}/like`
+          : `http://172.18.0.3:8080/api/posts/${post.id}/dislike`; // Use a different URL for dislike
+
+      // Send reaction to the backend
+      const response = await axios.post(
+        url,
+        { reaction: reactionType },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      // Update local state with new like/dislike count
+      if (response.data) {
+        setPost({
+          ...post,
+          likes: response.data.likes || post.likes,
+          dislikes: response.data.dislikes || post.dislikes,
+        });
+      }
+    } catch (error) {
+      console.error("Error reacting to post:", error.response?.data || error);
+    }
+  };
+
+  // Sorting posts by the number of likes (highest to lowest)
+  const sortedPosts = [post].sort((a, b) => b.likes - a.likes); // Sort by likes in descending order
+
   return (
     <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-md border border-gray-300 dark:border-gray-700">
       <div className="flex items-center mb-3">
@@ -96,16 +131,16 @@ function Post({ post: initialPost, onReact }) {
 
       <div className="mt-4 flex items-center space-x-4">
         <button
-          onClick={() => onReact(post.id, "like")}
-          className="flex items-center space-x-1 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-500 transition"
+          onClick={() => handleReaction("like")}
+          className="flex items-center space-x-1 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-500 transition cursor-pointer"
         >
           <span>👍</span>
           <span>{post.likes}</span>
         </button>
 
         <button
-          onClick={() => onReact(post.id, "dislike")}
-          className="flex items-center space-x-1 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-500 transition"
+          onClick={() => handleReaction("dislike")}
+          className="flex items-center space-x-1 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-500 transition cursor-pointer"
         >
           <span>👎</span>
           <span>{post.dislikes}</span>

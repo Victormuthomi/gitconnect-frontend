@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Sidebar from "../components/Sidebar";
 import axios from "axios";
 import Post from "../components/Post";
 import AddPost from "../components/AddPost";
@@ -61,8 +60,6 @@ function Dashboard() {
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      <Sidebar />
-
       <div className="flex-1 max-w-2xl mx-auto p-6 overflow-y-auto">
         <h1 className="text-3xl font-bold mb-4 text-center">GitConnect Feed</h1>
 

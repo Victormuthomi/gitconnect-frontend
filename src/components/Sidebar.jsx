@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function CreateProfile() {
+function UpdateProfile() {
   const navigate = useNavigate();
+  const userId = 1; // Replace with the actual user's ID
   const [formData, setFormData] = useState({
     full_name: "",
     bio: "",
@@ -25,25 +26,25 @@ function CreateProfile() {
     }
 
     try {
-      await axios.post(
-        "https://adequate-rejoicing-production.up.railway.app/api/profiles",
+      await axios.put(
+        `https://adequate-rejoicing-production.up.railway.app/api/profiles/${userId}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-      alert("Profile created successfully!");
-      navigate("/profile"); // Change the path as needed after creation
+      alert("Profile updated successfully!");
+      navigate("/profile");
     } catch (err) {
-      console.error("Profile creation failed:", err);
-      setError(err.response?.data?.message || "Profile creation failed.");
+      console.error("Profile update failed:", err);
+      setError(err.response?.data?.message || "Profile update failed.");
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
       <div className="w-full max-w-md bg-gray-800 p-6 rounded-lg">
-        <h2 className="text-2xl font-bold text-center">Create Profile</h2>
+        <h2 className="text-2xl font-bold text-center">Update Profile</h2>
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="mt-4">
           <input
@@ -74,7 +75,7 @@ function CreateProfile() {
             type="submit"
             className="w-full bg-blue-500 hover:bg-blue-700 py-3 rounded-lg"
           >
-            Create Profile
+            Update Profile
           </button>
         </form>
       </div>
@@ -82,4 +83,4 @@ function CreateProfile() {
   );
 }
 
-export default CreateProfile;
+export default UpdateProfile;

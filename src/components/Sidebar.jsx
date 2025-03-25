@@ -70,17 +70,6 @@ function Sidebar() {
 
           {isLoggedIn ? (
             <>
-              {/* Dashboard Link */}
-              <li>
-                <Link
-                  to="/dashboard"
-                  className="flex items-center p-3 hover:bg-gray-700 rounded-md transition"
-                >
-                  <FiHome size={20} />
-                  {!collapsed && <span className="ml-3">Dashboard</span>}
-                </Link>
-              </li>
-
               {/* Profile Link */}
               <li>
                 <Link

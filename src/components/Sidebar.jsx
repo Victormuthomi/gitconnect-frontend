@@ -1,148 +1,85 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  FiUser,
-  FiSettings,
-  FiUsers,
-  FiChevronLeft,
-  FiChevronRight,
-  FiHome,
-} from "react-icons/fi";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-function Sidebar() {
-  const [collapsed, setCollapsed] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+function CreateProfile() {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    full_name: "",
+    bio: "",
+    github: "",
+  });
+  const [error, setError] = useState("");
 
-  // Poll localStorage every 500ms for changes in login status.
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const token = localStorage.getItem("token");
-      setIsLoggedIn(!!token);
-    }, 500);
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    return () => clearInterval(interval);
-  }, []);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
-    navigate("/login");
+    if (!token) {
+      setError("No authorization token found.");
+      return;
+    }
+
+    try {
+      await axios.post(
+        "https://adequate-rejoicing-production.up.railway.app/api/profiles",
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      alert("Profile created successfully!");
+      navigate("/profile"); // Change the path as needed after creation
+    } catch (err) {
+      console.error("Profile creation failed:", err);
+      setError(err.response?.data?.message || "Profile creation failed.");
+    }
   };
 
   return (
-    <div
-      className={`h-screen bg-gray-900 text-white transition-all flex flex-col fixed left-0 top-0 ${
-        collapsed ? "w-16" : "w-64"
-      } md:w-64 sm:w-full duration-300 shadow-lg z-10`}
-    >
-      {/* Logo */}
-      <div className="p-3 flex items-center justify-center">
-        <Link
-          to={isLoggedIn ? "/dashboard" : "/landing"}
-          className="text-xl font-bold text-white"
-        >
-          GitConnect
-        </Link>
+    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
+      <div className="w-full max-w-md bg-gray-800 p-6 rounded-lg">
+        <h2 className="text-2xl font-bold text-center">Create Profile</h2>
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+        <form onSubmit={handleSubmit} className="mt-4">
+          <input
+            type="text"
+            name="full_name"
+            placeholder="Full Name"
+            value={formData.full_name}
+            onChange={handleChange}
+            required
+            className="w-full p-3 rounded-lg bg-gray-700 text-white mb-3"
+          />
+          <textarea
+            name="bio"
+            placeholder="Bio"
+            value={formData.bio}
+            onChange={handleChange}
+            className="w-full p-3 rounded-lg bg-gray-700 text-white mb-3"
+          />
+          <input
+            type="text"
+            name="github"
+            placeholder="GitHub Link"
+            value={formData.github}
+            onChange={handleChange}
+            className="w-full p-3 rounded-lg bg-gray-700 text-white mb-3"
+          />
+          <button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-700 py-3 rounded-lg"
+          >
+            Create Profile
+          </button>
+        </form>
       </div>
-
-      {/* Toggle Button */}
-      <button
-        className="p-3 flex items-center justify-center hover:bg-gray-700"
-        onClick={() => setCollapsed(!collapsed)}
-      >
-        {collapsed ? <FiChevronRight size={20} /> : <FiChevronLeft size={20} />}
-      </button>
-
-      {/* Navigation Links */}
-      <nav className="mt-4 flex-1">
-        <ul className="space-y-2">
-          {/* Home Button */}
-          <li>
-            <Link
-              to={isLoggedIn ? "/dashboard" : "/landing"}
-              className="flex items-center p-3 hover:bg-gray-700 rounded-md transition"
-            >
-              <FiHome size={20} />
-              {!collapsed && <span className="ml-3">Home</span>}
-            </Link>
-          </li>
-
-          {isLoggedIn ? (
-            <>
-              {/* Profile Link */}
-              <li>
-                <Link
-                  to="/profile"
-                  className="flex items-center p-3 hover:bg-gray-700 rounded-md transition"
-                >
-                  <FiUser size={20} />
-                  {!collapsed && <span className="ml-3">My Profile</span>}
-                </Link>
-              </li>
-
-              {/* All Profiles Link */}
-              <li>
-                <Link
-                  to="/profiles"
-                  className="flex items-center p-3 hover:bg-gray-700 rounded-md transition"
-                >
-                  <FiUsers size={20} />
-                  {!collapsed && <span className="ml-3">All Profiles</span>}
-                </Link>
-              </li>
-
-              {/* Settings Link */}
-              <li>
-                <Link
-                  to="/profile/edit"
-                  className="flex items-center p-3 hover:bg-gray-700 rounded-md transition"
-                >
-                  <FiSettings size={20} />
-                  {!collapsed && <span className="ml-3">Settings</span>}
-                </Link>
-              </li>
-
-              {/* Logout Button */}
-              <li>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center p-3 hover:bg-red-700 rounded-md transition w-full"
-                >
-                  <FiHome size={20} />
-                  {!collapsed && <span className="ml-3">Logout</span>}
-                </button>
-              </li>
-            </>
-          ) : (
-            <>
-              {/* Login Link */}
-              <li>
-                <Link
-                  to="/login"
-                  className="flex items-center p-3 hover:bg-gray-700 rounded-md transition"
-                >
-                  <FiUser size={20} />
-                  {!collapsed && <span className="ml-3">Login</span>}
-                </Link>
-              </li>
-
-              {/* Register Link */}
-              <li>
-                <Link
-                  to="/register"
-                  className="flex items-center p-3 hover:bg-gray-700 rounded-md transition"
-                >
-                  <FiUser size={20} />
-                  {!collapsed && <span className="ml-3">Register</span>}
-                </Link>
-              </li>
-            </>
-          )}
-        </ul>
-      </nav>
     </div>
   );
 }
 
-export default Sidebar;
+export default CreateProfile;

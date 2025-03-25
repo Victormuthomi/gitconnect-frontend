@@ -7,7 +7,7 @@ const AllProfiles = () => {
 
   useEffect(() => {
     axios
-      .get("http://172.18.0.3:8080/api/profiles")
+      .get("https://adequate-rejoicing-production.up.railway.app/api/profiles")
       .then((res) => setProfiles(res.data.profiles))
       .catch((err) => console.error(err));
   }, []);
@@ -23,7 +23,7 @@ const AllProfiles = () => {
         {profiles.length > 0 ? (
           profiles.map((profile) => {
             const profilePicture = profile.profile_picture
-              ? `http://172.18.0.3:8080/${profile.profile_picture}`
+              ? `https://adequate-rejoicing-production.up.railway.app/api/${profile.profile_picture}`
               : defaultAvatar;
 
             return (

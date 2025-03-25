@@ -19,9 +19,9 @@ function AddPost({ onPostAdded }) {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://172.18.0.3:8080/api/posts",
+        "https://adequate-rejoicing-production.up.railway.app/api/posts",
         { content },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       // Ensure the new post has the current user's details
@@ -63,4 +63,3 @@ function AddPost({ onPostAdded }) {
 }
 
 export default AddPost;
-

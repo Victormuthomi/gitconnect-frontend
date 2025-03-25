@@ -17,9 +17,12 @@ function Dashboard() {
     if (!token) return;
 
     try {
-      const response = await axios.get("http://172.18.0.3:8080/api/posts", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        "https://adequate-rejoicing-production.up.railway.app/api/posts",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       setPosts(Array.isArray(response.data.posts) ? response.data.posts : []);
     } catch (error) {
       console.error("Error fetching posts:", error.response?.data || error);
@@ -33,7 +36,7 @@ function Dashboard() {
 
     try {
       const response = await axios.post(
-        `http://172.18.0.3:8080/api/posts/${postId}/${type}`,
+        `https://adequate-rejoicing-production.up.railway.app/api/posts/${postId}/${type}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } },
       );

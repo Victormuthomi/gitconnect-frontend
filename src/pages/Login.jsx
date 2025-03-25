@@ -15,8 +15,8 @@ function Login() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://172.18.0.3:8080/api/auth/login",
-        formData
+        "https://adequate-rejoicing-production.up.railway.app/api/auth/login",
+        formData,
       );
 
       // Store token, userId, and username in localStorage
@@ -71,4 +71,3 @@ function Login() {
 }
 
 export default Login;
-

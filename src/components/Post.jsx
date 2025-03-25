@@ -19,7 +19,7 @@ function Post({ post: initialPost, onReact }) {
   const fetchPost = async () => {
     try {
       const response = await axios.get(
-        `http://172.18.0.3:8080/api/posts/${initialPost.id}`,
+        `https://adequate-rejoicing-production.up.railway.app/api/posts/${initialPost.id}`,
       );
       setPost(response.data.post);
     } catch (error) {
@@ -30,7 +30,7 @@ function Post({ post: initialPost, onReact }) {
   const fetchComments = async () => {
     try {
       const response = await axios.get(
-        `http://172.18.0.3:8080/api/posts/${post.id}/comments`,
+        `https://adequate-rejoicing-production.up.railway.app/api/posts/${post.id}/comments`,
       );
       const commentsData = Array.isArray(response.data.comments)
         ? response.data.comments
@@ -56,7 +56,7 @@ function Post({ post: initialPost, onReact }) {
       console.log("Submitting comment:", { content: comment });
 
       const response = await axios.post(
-        `http://172.18.0.3:8080/api/posts/${post.id}/comments`,
+        `https://adequate-rejoicing-production.up.railway.app/api/posts/${post.id}/comments`,
         { content: comment, username },
         { headers: { Authorization: `Bearer ${token}` } },
       );
@@ -87,8 +87,8 @@ function Post({ post: initialPost, onReact }) {
       // Adjust the URL based on the reaction type
       const url =
         reactionType === "like"
-          ? `http://172.18.0.3:8080/api/posts/${post.id}/like`
-          : `http://172.18.0.3:8080/api/posts/${post.id}/dislike`; // Use a different URL for dislike
+          ? `https://adequate-rejoicing-production.up.railway.app/api/posts/${post.id}/like`
+          : `https://adequate-rejoicing-production.up.railway.app/api/posts/${post.id}/dislike`; // Use a different URL for dislike
 
       // Send reaction to the backend
       const response = await axios.post(

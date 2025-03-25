@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const UpdateProfile = () => {
-  const userId = 1; // Replace with the logged-in user's ID
+function UpdateProfile() {
+  const navigate = useNavigate();
+  const userId = 1; // Replace with the actual user's ID
   const [formData, setFormData] = useState({
     full_name: "",
     bio: "",
@@ -14,65 +16,71 @@ const UpdateProfile = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Only POST request is used for now (no GET or PUT)
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
 
+    if (!token) {
+      setError("No authorization token found.");
+      return;
+    }
+
     try {
-      await axios.post(
-        `https://adequate-rejoicing-production.up.railway.app/api/profiles`,
+      await axios.put(
+        `https://adequate-rejoicing-production.up.railway.app/api/profiles/${userId}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
       alert("Profile updated successfully!");
+      navigate("/profile");
     } catch (err) {
-      console.error("Update failed", err);
-      setError("Update failed");
+      console.error("Profile update failed:", err);
+      setError(err.response?.data?.message || "Profile update failed.");
     }
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h2 className="text-2xl font-bold">Update Profile</h2>
-      {error && <p className="text-red-500">{error}</p>}
-      <form onSubmit={handleSubmit} className="mt-4">
-        <input
-          type="text"
-          name="full_name"
-          placeholder="Full Name"
-          value={formData.full_name}
-          onChange={handleChange}
-          className="block w-full p-2 border rounded mt-2"
-          required
-        />
-        <textarea
-          name="bio"
-          placeholder="Bio"
-          value={formData.bio}
-          onChange={handleChange}
-          className="block w-full p-2 border rounded mt-2"
-        />
-        <input
-          type="text"
-          name="github"
-          placeholder="GitHub Link"
-          value={formData.github}
-          onChange={handleChange}
-          className="block w-full p-2 border rounded mt-2"
-        />
-        <button
-          type="submit"
-          className="bg-green-500 text-white px-4 py-2 mt-2 rounded"
-        >
-          Save Changes
-        </button>
-      </form>
+    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
+      <div className="w-full max-w-md bg-gray-800 p-6 rounded-lg">
+        <h2 className="text-2xl font-bold text-center">Update Profile</h2>
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+        <form onSubmit={handleSubmit} className="mt-4">
+          <input
+            type="text"
+            name="full_name"
+            placeholder="Full Name"
+            value={formData.full_name}
+            onChange={handleChange}
+            required
+            className="w-full p-3 rounded-lg bg-gray-700 text-white mb-3"
+          />
+          <textarea
+            name="bio"
+            placeholder="Bio"
+            value={formData.bio}
+            onChange={handleChange}
+            className="w-full p-3 rounded-lg bg-gray-700 text-white mb-3"
+          />
+          <input
+            type="text"
+            name="github"
+            placeholder="GitHub Link"
+            value={formData.github}
+            onChange={handleChange}
+            className="w-full p-3 rounded-lg bg-gray-700 text-white mb-3"
+          />
+          <button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-700 py-3 rounded-lg"
+          >
+            Update Profile
+          </button>
+        </form>
+      </div>
     </div>
   );
-};
+}
 
 export default UpdateProfile;
-

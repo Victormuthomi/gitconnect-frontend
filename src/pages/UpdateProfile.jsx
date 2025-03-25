@@ -16,11 +16,14 @@ const UpdateProfile = () => {
     const token = localStorage.getItem("token");
     if (token) {
       axios
-        .get(`http://172.18.0.3:8080/api/profiles/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        .get(
+          `https://adequate-rejoicing-production.up.railway.app/api/profiles/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        })
+        )
         .then((res) => {
           setProfile(res.data);
           setFormData({
@@ -55,7 +58,7 @@ const UpdateProfile = () => {
     if (token) {
       try {
         await axios.put(
-          `http://172.18.0.3:8080/api/profiles/${userId}`,
+          `https://adequate-rejoicing-production.up.railway.app/api/profiles/${userId}`,
           formData,
           {
             headers: {

@@ -1,16 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function UpdateProfile() {
   const navigate = useNavigate();
-  const userId = 1; // Replace with the actual user's ID
+  const [userId, setUserId] = useState(null);
   const [formData, setFormData] = useState({
     full_name: "",
     bio: "",
     github: "",
   });
   const [error, setError] = useState("");
+
+  // Retrieve userId from localStorage on component mount.
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) {
+      setUserId(storedUserId);
+    } else {
+      setError("User ID not found in local storage.");
+    }
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,6 +32,10 @@ function UpdateProfile() {
 
     if (!token) {
       setError("No authorization token found.");
+      return;
+    }
+    if (!userId) {
+      setError("User ID not found.");
       return;
     }
 
@@ -40,6 +54,10 @@ function UpdateProfile() {
       setError(err.response?.data?.message || "Profile update failed.");
     }
   };
+
+  if (!userId) {
+    return <div>{error || "Loading..."}</div>;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">

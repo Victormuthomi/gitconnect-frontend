@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://adequate-rejoicing-production.up.railway.app/api/$1"
+    }
+  ]
+}
+

@@ -14,9 +14,12 @@ const UserProfile = () => {
       return;
     }
     axios
-      .get(`http://172.18.0.3:8080/api/profiles/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(
+        `https://adequate-rejoicing-production.up.railway.app/api/profiles/${userId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      )
       .then((res) => {
         if (res.data.profile) {
           setProfile(res.data.profile);
@@ -40,7 +43,7 @@ const UserProfile = () => {
 
   // Use GET endpoint for profile image
   const profilePicture = profile.profile_picture
-    ? `http://172.18.0.3:8080/api/profiles/${userId}/image`
+    ? `https://adequate-rejoicing-production.up.railway.app/api/profiles/${userId}/image`
     : "https://www.gravatar.com/avatar/?d=mp"; // default avatar
 
   return (

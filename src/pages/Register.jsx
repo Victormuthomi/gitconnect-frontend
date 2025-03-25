@@ -25,11 +25,14 @@ function Register() {
     }
 
     try {
-      await axios.post("http://172.18.0.3:8080/api/auth/register", {
-        username: formData.username,
-        email: formData.email,
-        password: formData.password, // Only send necessary data
-      });
+      await axios.post(
+        "https://adequate-rejoicing-production.up.railway.app/api/auth/register",
+        {
+          username: formData.username,
+          email: formData.email,
+          password: formData.password, // Only send necessary data
+        },
+      );
 
       navigate("/login");
     } catch (err) {

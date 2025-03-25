@@ -7,12 +7,12 @@ const UserProfile = () => {
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  // Function to fetch profile
+  const fetchProfile = () => {
     if (!userId || !token) {
       setError("User not authenticated");
       return;
     }
-
     axios
       .get(`http://172.18.0.3:8080/api/profiles/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -20,6 +20,7 @@ const UserProfile = () => {
       .then((res) => {
         if (res.data.profile) {
           setProfile(res.data.profile);
+          setError(null);
         } else {
           setError("Profile not found");
         }
@@ -28,16 +29,19 @@ const UserProfile = () => {
         console.error("Error fetching profile:", err);
         setError("Profile not found");
       });
+  };
+
+  useEffect(() => {
+    fetchProfile();
   }, [userId, token]);
 
   if (error) return <p className="text-center text-red-500 mt-4">{error}</p>;
   if (!profile) return <p className="text-center mt-4">Loading profile...</p>;
 
-  // Default avatar if no profile picture is uploaded
-  const defaultAvatar = "https://www.gravatar.com/avatar/?d=mp"; // Replace with a custom default avatar
+  // Use GET endpoint for profile image
   const profilePicture = profile.profile_picture
-    ? `http://172.18.0.3:8080/${profile.profile_picture}`
-    : defaultAvatar;
+    ? `http://172.18.0.3:8080/api/profiles/${userId}/image`
+    : "https://www.gravatar.com/avatar/?d=mp"; // default avatar
 
   return (
     <div className="max-w-md mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden p-6 text-center transition duration-300">

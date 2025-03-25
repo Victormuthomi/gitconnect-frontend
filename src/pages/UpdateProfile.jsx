@@ -9,16 +9,16 @@ const UpdateProfile = () => {
     bio: "",
     github: "",
   });
-  const [image, setImage] = useState(null);
-  const [loading, setLoading] = useState(true); // State to handle loading state
+  const [loading, setLoading] = useState(true); // Handle loading state
 
-  useEffect(() => {
-    const token = localStorage.getItem("token"); // Get token from localStorage (corrected key)
+  // Function to fetch profile data
+  const fetchProfile = () => {
+    const token = localStorage.getItem("token");
     if (token) {
       axios
         .get(`http://172.18.0.3:8080/api/profiles/${userId}`, {
           headers: {
-            Authorization: `Bearer ${token}`, // Include token in the header
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {
@@ -28,29 +28,29 @@ const UpdateProfile = () => {
             bio: res.data.bio || "",
             github: res.data.github || "",
           });
-          setLoading(false); // Set loading to false once data is fetched
+          setLoading(false);
         })
         .catch((err) => {
           console.error("Error fetching profile data:", err);
-          setLoading(false); // Set loading to false even if there's an error
+          setLoading(false);
         });
     } else {
       console.log("No authorization token found.");
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchProfile();
   }, [userId]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleFileChange = (e) => {
-    setImage(e.target.files[0]);
-  };
-
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("token"); // Get token from localStorage (corrected key)
+    const token = localStorage.getItem("token");
 
     if (token) {
       try {
@@ -59,7 +59,7 @@ const UpdateProfile = () => {
           formData,
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Add token to the request header
+              Authorization: `Bearer ${token}`,
             },
           },
         );
@@ -73,36 +73,6 @@ const UpdateProfile = () => {
     }
   };
 
-  const handleImageUpload = async () => {
-    if (!image) return;
-
-    const formDataImage = new FormData();
-    formDataImage.append("profile_picture", image);
-    const token = localStorage.getItem("token"); // Get token from localStorage (corrected key)
-
-    if (token) {
-      try {
-        const res = await axios.post(
-          `http://172.18.0.3:8080/api/profiles/${userId}/upload`,
-          formDataImage,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Include token in the request header
-            },
-          },
-        );
-        alert("Profile picture updated!");
-        setProfile({ ...profile, profile_picture: res.data.profile_picture });
-      } catch (error) {
-        console.error("Upload failed", error);
-        alert("Failed to upload image");
-      }
-    } else {
-      alert("No authorization token found.");
-    }
-  };
-
-  // Show loading state or the profile form
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -110,26 +80,6 @@ const UpdateProfile = () => {
   return (
     <div className="p-4 max-w-md mx-auto">
       <h2 className="text-2xl font-bold">Update Profile</h2>
-
-      {profile.profile_picture && (
-        <div className="mt-4 text-center">
-          <img
-            src={`http://172.18.0.3:8080/${profile.profile_picture}`}
-            alt="Profile"
-            className="w-32 h-32 rounded-full mx-auto"
-          />
-        </div>
-      )}
-
-      <div className="mt-4 text-center">
-        <input type="file" onChange={handleFileChange} className="mt-4" />
-        <button
-          onClick={handleImageUpload}
-          className="bg-blue-500 text-white px-4 py-2 mt-2 rounded"
-        >
-          Upload Image
-        </button>
-      </div>
 
       <form onSubmit={handleUpdateProfile} className="mt-4">
         <input

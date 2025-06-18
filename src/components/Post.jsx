@@ -19,7 +19,7 @@ function Post({ post: initialPost, onReact }) {
   const fetchPost = async () => {
     try {
       const response = await axios.get(
-        `https://adequate-rejoicing-production.up.railway.app/api/posts/${initialPost.id}`,
+        `https://gitconnect-backend.onrender.com/api/posts/${initialPost.id}`,
       );
       setPost(response.data.post);
     } catch (error) {

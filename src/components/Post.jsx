@@ -30,7 +30,7 @@ function Post({ post: initialPost, onReact }) {
   const fetchComments = async () => {
     try {
       const response = await axios.get(
-        `https://adequate-rejoicing-production.up.railway.app/api/posts/${post.id}/comments`,
+        `https://gitconnect-backend.onrender.com/api/posts/${post.id}/comments`,
       );
       const commentsData = Array.isArray(response.data.comments)
         ? response.data.comments
@@ -56,7 +56,7 @@ function Post({ post: initialPost, onReact }) {
       console.log("Submitting comment:", { content: comment });
 
       const response = await axios.post(
-        `https://adequate-rejoicing-production.up.railway.app/api/posts/${post.id}/comments`,
+        `https://gitconnect-backend.onrender.com/api/posts/${post.id}/comments`,
         { content: comment, username },
         { headers: { Authorization: `Bearer ${token}` } },
       );

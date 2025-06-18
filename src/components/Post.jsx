@@ -87,8 +87,8 @@ function Post({ post: initialPost, onReact }) {
       // Adjust the URL based on the reaction type
       const url =
         reactionType === "like"
-          ? `https://adequate-rejoicing-production.up.railway.app/api/posts/${post.id}/like`
-          : `https://adequate-rejoicing-production.up.railway.app/api/posts/${post.id}/dislike`; // Use a different URL for dislike
+          ? `https://gitconnect-backend.onrender.com/api/posts/${post.id}/like`
+          : `https://gitconnect-backend.onrender.com/api/posts/${post.id}/dislike`; // Use a different URL for dislike
 
       // Send reaction to the backend
       const response = await axios.post(

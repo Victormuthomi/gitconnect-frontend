@@ -19,7 +19,7 @@ function AddPost({ onPostAdded }) {
     try {
       setLoading(true);
       const response = await axios.post(
-        "https://adequate-rejoicing-production.up.railway.app/api/posts",
+        "https://gitconnect-backend.onrender.com/api/posts",
         { content },
         { headers: { Authorization: `Bearer ${token}` } },
       );

@@ -15,7 +15,7 @@ function Login() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "https://adequate-rejoicing-production.up.railway.app/api/auth/login",
+        "https://gitconnect-backend.onrender.com/api/auth/login",
         formData,
       );
 

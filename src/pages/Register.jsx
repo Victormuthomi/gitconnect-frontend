@@ -26,7 +26,7 @@ function Register() {
 
     try {
       await axios.post(
-        "https://adequate-rejoicing-production.up.railway.app/api/auth/register",
+        "https://gitconnect-backend.onrender.com/api/auth/register",
         {
           username: formData.username,
           email: formData.email,

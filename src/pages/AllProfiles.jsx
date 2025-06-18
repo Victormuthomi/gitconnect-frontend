@@ -7,7 +7,7 @@ const AllProfiles = () => {
 
   useEffect(() => {
     axios
-      .get("https://adequate-rejoicing-production.up.railway.app/api/profiles")
+      .get("https://gitconnect-backend.onrender.com/api/profiles")
       .then((res) => setProfiles(res.data.profiles))
       .catch((err) => console.error(err));
   }, []);

@@ -41,7 +41,7 @@ function UpdateProfile() {
 
     try {
       await axios.put(
-        `https://adequate-rejoicing-production.up.railway.app/api/profiles/${userId}`,
+        `https://gitconnect-backend.onrender.com/api/profiles/${userId}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },

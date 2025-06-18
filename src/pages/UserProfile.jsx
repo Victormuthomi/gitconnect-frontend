@@ -14,12 +14,9 @@ const UserProfile = () => {
       return;
     }
     axios
-      .get(
-        `https://adequate-rejoicing-production.up.railway.app/api/profiles/${userId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      )
+      .get(`https://gitconnect-backend.onrender.com/api/profiles/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((res) => {
         if (res.data.profile) {
           setProfile(res.data.profile);

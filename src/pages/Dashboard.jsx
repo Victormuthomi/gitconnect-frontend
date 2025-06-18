@@ -18,7 +18,7 @@ function Dashboard() {
 
     try {
       const response = await axios.get(
-        "https://adequate-rejoicing-production.up.railway.app/api/posts",
+        "https://gitconnect-backend.onrender.com/api/posts",
         {
           headers: { Authorization: `Bearer ${token}` },
         },
